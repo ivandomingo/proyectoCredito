@@ -10,5 +10,6 @@
     <mapping resource="com/fpmislata/banco/modelo/CuentaBancaria.hbm.xml"/>
     <mapping resource="com/fpmislata/banco/modelo/MovimientoBancario.hbm.xml"/>
     <mapping resource="com/fpmislata/banco/modelo/Usuario.hbm.xml"/>
+    <mapping resource="com/fpmislata/banco/modelo/Credito.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

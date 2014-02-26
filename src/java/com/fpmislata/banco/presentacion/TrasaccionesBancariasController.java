@@ -33,37 +33,42 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author alumno
  */
 @Controller
-public class TrasaccionesBancariasController {
-
-    @Autowired
-    private CuentaBancariaDAO cuentaBancariaDAO;
+public class TrasaccionesBancariasController {//controlador de transacciones Bancarias
+//recibe un json con los datos y crea dos movimientos---Deber y Haber
+    @Autowired//inyeccion de dependencias---Existe una bean en application context
+    private CuentaBancariaDAO cuentaBancariaDAO;//primer objeto con el que vamos a trabajar
     
-    @Autowired
-    private MovimientoBancarioDAO movimientoBancarioDAO;
+    @Autowired//inyeccion de dependencias
+    private MovimientoBancarioDAO movimientoBancarioDAO;//segundo objeto con el vamos a trabajar
     
    
 
-@RequestMapping(value = {"/TransaccionBancaria"}, method = RequestMethod.POST)
+@RequestMapping(value = {"/TransaccionBancaria"}, method = RequestMethod.POST)//en caso de recibir una peticion por post a /TransaccionBancaria realiza un insert
     public void insert(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestBody String json) throws JsonProcessingException {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            ObjectMapper objectMapper = new ObjectMapper();//objeto que permite mapear los JSON
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);//configura el objeto, para que escriba como fechas los timestamps
             TransaccionBancaria transaccionBancaria = (TransaccionBancaria) objectMapper.readValue(json, TransaccionBancaria.class);
+            //Crea un objeto transaccionBancaria con el objeto casteado y mapeado por el ObjectoMapper.readValue
+            //readValue(json, TransaccionBancaria.class) lee el json, y lo mapea con la clase Transaccion Bancaria
             
             
-            CuentaBancaria cuentaBancariaOrigen = cuentaBancariaDAO.findByCodigo(transaccionBancaria.getCodigoCuentaClienteOrigen());
+            
+            CuentaBancaria cuentaBancariaOrigen = cuentaBancariaDAO.findByCodigo(transaccionBancaria.getCodigoCuentaClienteOrigen());//guarda la cuenta origen
+            //transaccionBancaria.getCodigoCuentaClienteOrigen() coge la cuenta cliente de la transaccion mapeada
+            //cuentaBancariaDAO.findByCodigo(anterior) busca la cuenta bancaria por el codigo
             CuentaBancaria cuentaBancariaDestino = cuentaBancariaDAO.findByCodigo(transaccionBancaria.getCodigoCuentaClienteDestino());
-           
-            /*-----------------------Origen---------------------------*/
-            MovimientoBancario movimientoBancarioOrigen = new MovimientoBancario();
+           //igual que la de antes pero con la de destino
+            /*-----------------------Origen---------------------------*/  //Creamos el movimiento para la cuenta origen
+            MovimientoBancario movimientoBancarioOrigen = new MovimientoBancario();//nuevo movimiento bancario
             
-            movimientoBancarioOrigen.setCuentaBancaria(cuentaBancariaOrigen);
-            movimientoBancarioOrigen.setTipoMovimientoBancario(TipoMovimientoBancario.Debe);
-            movimientoBancarioOrigen.setImporte(transaccionBancaria.getTotal());
-            movimientoBancarioOrigen.setFecha(new Date());
-            movimientoBancarioOrigen.setConcepto(transaccionBancaria.getConcepto());
+            movimientoBancarioOrigen.setCuentaBancaria(cuentaBancariaOrigen);//guarda la cuenta bancaria origen
+            movimientoBancarioOrigen.setTipoMovimientoBancario(TipoMovimientoBancario.Debe);//pone el tipo a deber
+            movimientoBancarioOrigen.setImporte(transaccionBancaria.getTotal());//recoge y guarda el valor de la transaccion en el movimiento
+            movimientoBancarioOrigen.setFecha(new Date());//graba la fecha actual
+            movimientoBancarioOrigen.setConcepto(transaccionBancaria.getConcepto());//graba el concepto de la transaccion en el movimiento
             
-            movimientoBancarioDAO.insert(movimientoBancarioOrigen);
+            movimientoBancarioDAO.insert(movimientoBancarioOrigen);//realiza el insert del movimiento origen
             
             /*-----------------------Destino---------------------------*/
             MovimientoBancario movimientoBancarioDestino = new MovimientoBancario();
@@ -77,7 +82,7 @@ public class TrasaccionesBancariasController {
             movimientoBancarioDAO.insert(movimientoBancarioDestino);
             
             noCache(httpServletResponse);
-            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);//si todo va bien devuelve un OK
         } catch (ConstraintViolationException cve) {
             List<BussinesMessage> errorList = new ArrayList();
             ObjectMapper jackson = new ObjectMapper();
@@ -105,6 +110,6 @@ public class TrasaccionesBancariasController {
         }
     }
 private void noCache(HttpServletResponse httpServletResponse){
-      httpServletResponse.setHeader("Cache-Control", "no-cache");
+      httpServletResponse.setHeader("Cache-Control", "no-cache");//permite que no cachee el servidor
   }
 }

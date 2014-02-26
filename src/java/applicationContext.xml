@@ -12,13 +12,14 @@
     <!--Permite usar entre otras las anotaciones @Component y @Controller -->
     <context:component-scan base-package="com.fpmislata.banco.datos"/>
     <context:component-scan base-package="com.fpmislata.banco.presentacion.seguridad"/>
- 
+    
     <bean class="com.fpmislata.banco.datos.HibernateUtil" factory-method="getSessionFactory"  />
     <bean class="com.fpmislata.banco.datos.EntidadBancariaDAOImpHibernate" />
     <bean class="com.fpmislata.banco.datos.CuentaBancariaDAOImpHibernate" />
     <bean class="com.fpmislata.banco.datos.MovimientoBancarioDAOImpHibernate" />
     <bean class="com.fpmislata.banco.datos.SucursalBancariaDAOImpHibernate" />
     <bean class="com.fpmislata.banco.datos.UsuarioDAOImplHibernate" />
+    <bean class="com.fpmislata.banco.datos.CreditoDAOImplHibernate" />
     <bean class="com.fpmislata.banco.presentacion.seguridad.FilterSecurity" id="FilterSecurity" />
     <bean class="com.fpmislata.banco.presentacion.seguridad.AutorizacionImplCutre" />
 

@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
  *
  * @author alumno
  */
-@JsonIgnoreProperties({ "handler","hibernateLazyInitializer" })
+@JsonIgnoreProperties({"handler","hibernateLazyInitializer" })
 public class CuentaBancaria {
     @NotNull
     private int idCuentaBancaria;
