@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class Credito implements Serializable {
     private int idCredito;
-    private int idUsuario;
+    private Usuario usuario;
     private double totalCredito;
     private Date fechaExpedicion;
 
@@ -21,12 +21,12 @@ public class Credito implements Serializable {
         
     }
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public double getTotalCredito() {

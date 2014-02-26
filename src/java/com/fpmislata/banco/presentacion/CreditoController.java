@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class CreditoController {
 
     @Autowired
-    private CreditoDAO creditoBancario;
+    private CreditoDAO creditoBancarioDAO;
     @Autowired
     private MovimientoBancarioDAO movimientoBancarioDAO;
     @Autowired
@@ -38,25 +38,26 @@ public class CreditoController {
 
     @RequestMapping(value = {"/Credito"}, method = RequestMethod.POST)
     public void insert(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestBody String json) throws IOException {
+        
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-
+        
         Credito credito = (Credito) objectMapper.readValue(json, Credito.class);
-
-        if (creditoBancario.comprobarCredito(credito.getIdUsuario())) {
+        
+        if (creditoBancarioDAO.comprobarCredito(credito.getUsuario())) {
             MovimientoBancario movimientoBancario = new MovimientoBancario();//nuevo movimiento bancario
-            List<CuentaBancaria> listaCuentasCliente = cuentaBancariaDAO.findByUser(credito.getIdUsuario());
+            List<CuentaBancaria> listaCuentasCliente = cuentaBancariaDAO.findByUser(credito.getUsuario().getIdUsuario());
 
             for (int i = 0; i <= listaCuentasCliente.size();) {
-                CuentaBancaria codCuenta=cuentaBancariaDAO.findByCodigo(listaCuentasCliente.get(i).getNumeroCuenta());
+                CuentaBancaria primeraCuenta=cuentaBancariaDAO.findByCodigo(listaCuentasCliente.get(i).getNumeroCuenta());
                 
-                movimientoBancario.setCuentaBancaria(codCuenta);//guarda la cuenta bancaria origen
+                movimientoBancario.setCuentaBancaria(primeraCuenta);//guarda la cuenta bancaria origen
                 movimientoBancario.setTipoMovimientoBancario(TipoMovimientoBancario.Haber);//pone el tipo a deber
                 movimientoBancario.setImporte(credito.getTotalCredito());//recoge y guarda el valor de la transaccion en el movimiento
                 movimientoBancario.setFecha(credito.getFechaExpedicion());//graba la fecha actual
                 movimientoBancario.setConcepto("Credito expedido por la Entidad Bancaria");//graba el concepto de la transaccion en el movimiento
             }
-
+            creditoBancarioDAO.insert(credito);
             movimientoBancarioDAO.insert(movimientoBancario);//realiza el insert del movimiento origen
             noCache(httpServletResponse);
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);//si todo va bien devuelve un OK

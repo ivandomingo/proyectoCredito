@@ -12,6 +12,6 @@
         <property name="dc" column="dc" />
         <property column="saldo" name="saldo" />
         <property column="cif" name="cif" />
-        <property column="idUsuario" name="idUsuario" />
+        <property column="idUsuario" name="usuario" />
     </class>
 </hibernate-mapping>

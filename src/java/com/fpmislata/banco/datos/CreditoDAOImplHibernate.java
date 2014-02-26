@@ -6,6 +6,7 @@ package com.fpmislata.banco.datos;
 
 import com.fpmislata.banco.modelo.Credito;
 import com.fpmislata.banco.modelo.CuentaBancaria;
+import com.fpmislata.banco.modelo.Usuario;
 import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -17,16 +18,16 @@ import org.hibernate.Session;
 public class CreditoDAOImplHibernate extends GenericDAOImpHibernate<Credito, Integer> implements CreditoDAO {
 
     @Override
-    public boolean comprobarCredito(int idUsuario) {
+    public boolean comprobarCredito(Usuario usuario) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        CuentaBancariaDAO cuentaBancariaDAO=new CuentaBancariaDAOImpHibernate();
+        /*Query query = session.createQuery("SELECT cuentaBancaria FROM CuentaBancaria cuentaBancaria WHERE IdUsuario=?");
+        query.setInteger(0, usuario.getIdUsuario());*/
+        
+        List<CuentaBancaria> listaCuentas = cuentaBancariaDAO.findByUser(usuario.getIdUsuario());
 
-        Query query = session.createQuery("SELECT cuentaBancaria FROM CuentaBancaria cuentaBancaria WHERE IdUsuario=?");
-        query.setInteger(0, idUsuario);
-
-        List<CuentaBancaria> listaCuentas = query.list();
-
-        if (listaCuentas.isEmpty()) {//si la lista de cuentas esta vacia devuelve falso
+        if (listaCuentas.isEmpty()){//si la lista de cuentas esta vacia devuelve falso
             return false;
         } else {//si esta llena
             for (int i = 0; i <= listaCuentas.size(); i++) {//recorremos la lista de cuentas

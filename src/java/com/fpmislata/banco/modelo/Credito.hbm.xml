@@ -5,7 +5,9 @@
         <id name="idCredito" column="idCredito" type="integer">
             <generator class="identity" />
         </id>
-        <property name="idUsuario" column="idUsuario"/>
+        <many-to-one name="usuario">
+            <column name="idUsuario"/>
+        </many-to-one>
         <property name="totalCredito" column="totalCredito" />
         <property name="fechaExpedicion" column="fechaExpedicion" />
     </class>

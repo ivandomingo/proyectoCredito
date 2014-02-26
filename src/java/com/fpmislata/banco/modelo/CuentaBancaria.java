@@ -29,7 +29,8 @@ public class CuentaBancaria {
     @NotNull
     private String cif;
     private List <MovimientoBancario> ListaMovimientoBancario = new ArrayList();
-    private int IdUsuario;
+    private Usuario usuario;
+    
     public CuentaBancaria(){
         
     }
@@ -90,13 +91,18 @@ public class CuentaBancaria {
         this.ListaMovimientoBancario = ListaMovimientoBancario;
     }
 
-    public int getIdUsuario() {
-        return IdUsuario;
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 
-    public void setIdUsuario(int IdUsuario) {
-        this.IdUsuario = IdUsuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
     
     
 }

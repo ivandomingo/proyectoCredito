@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
   <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-<class name="com.fpmislata.banco.modelo.SucursalBancaria" table="sucursalbancaria" >
+    <class name="com.fpmislata.banco.modelo.SucursalBancaria" table="sucursalbancaria" >
         <id name="idSucursalBancaria" column="idSucursalBancaria" type="integer">
             <generator class="identity" />
         </id>
-       <many-to-one name="entidadBancaria">
-             <column name="identidadBancaria"/>
-     </many-to-one>
+        <many-to-one name="entidadBancaria">
+            <column name="identidadBancaria"/>
+        </many-to-one>
         <property name="codigoSucursal" column="codigoSucursal"/>
         <property name="nombreSucursal" column="nombreSucursal" />
     </class>
