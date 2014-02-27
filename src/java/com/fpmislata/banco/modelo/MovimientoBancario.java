@@ -5,6 +5,7 @@
 package com.fpmislata.banco.modelo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,7 @@ import javax.validation.constraints.Size;
  * @author alumno
  */
 @JsonIgnoreProperties({ "handler" ,"hibernateLazyInitializer"})
-public class MovimientoBancario {
+public class MovimientoBancario implements Serializable{
     @NotNull
     private int idMovimientoBancario;
     private TipoMovimientoBancario tipoMovimientoBancario;
