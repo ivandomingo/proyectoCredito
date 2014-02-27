@@ -28,7 +28,6 @@ public class CuentaBancariaDAOImpHibernate extends GenericDAOImpHibernate<Cuenta
         query.setString(2, CodigoCuentaCliente.substring(8, 10));
         query.setString(3, CodigoCuentaCliente.substring(10, 20));
 
-
         List<CuentaBancaria> listaCuentaBancaria = query.list();
         session.getTransaction().commit();
 
@@ -39,26 +38,22 @@ public class CuentaBancariaDAOImpHibernate extends GenericDAOImpHibernate<Cuenta
             } else {
                 return null;
             }
-
         } else {
             return null;
         }
     }
-    
+
     @Override
     public List<CuentaBancaria> findByUser(int idUsuario) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-
-        Query query = session.createQuery("SELECT cuentaBancaria FROM CuentaBancaria cuentaBancaria WHERE cuentaBancaria.idUsuario=? ");
+        Query query = session.createQuery("SELECT cuentaBancaria FROM CuentaBancaria cuentaBancaria WHERE cuentaBancaria.usuario=? ");
         query.setInteger(0, idUsuario);
-        
         List<CuentaBancaria> listaCuentaBancaria = query.list();
-        
         if (listaCuentaBancaria != null) {
-            return null;
-            }else{
             return listaCuentaBancaria;
+        } else {
+            return null;
         }
     }
 }

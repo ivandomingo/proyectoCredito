@@ -36,7 +36,7 @@ public class CreditoController {
     @Autowired
     private CuentaBancariaDAO cuentaBancariaDAO;
 
-    @RequestMapping(value = {"/Credito"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/Credito/{idCuentaBancaria}"}, method = RequestMethod.POST)
     public void insert(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse, @RequestBody String json) throws IOException {
         
         ObjectMapper objectMapper = new ObjectMapper();
@@ -61,6 +61,30 @@ public class CreditoController {
             movimientoBancarioDAO.insert(movimientoBancario);//realiza el insert del movimiento origen
             noCache(httpServletResponse);
             httpServletResponse.setStatus(HttpServletResponse.SC_OK);//si todo va bien devuelve un OK
+        }
+    }
+    
+    @RequestMapping(value = {"/Credito"}, method = RequestMethod.GET)
+    public void readAll(HttpServletRequest httpRequest, HttpServletResponse httpServletResponse) {
+        try {
+            ObjectMapper jackson = new ObjectMapper();
+            String json = jackson.writeValueAsString(creditoBancarioDAO.findAll());
+            noCache(httpServletResponse);
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+            httpServletResponse.setContentType("application/json; charset=UTF-8");
+
+            httpServletResponse.getWriter().println(json);
+
+        } catch (Exception ex) {
+            noCache(httpServletResponse);
+            httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            httpServletResponse.setContentType("text/plain; charset=UTF-8");
+            try {
+                noCache(httpServletResponse);
+                ex.printStackTrace(httpServletResponse.getWriter());
+            } catch (Exception ex1) {
+                noCache(httpServletResponse);
+            }
         }
     }
 
